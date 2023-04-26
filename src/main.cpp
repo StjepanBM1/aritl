@@ -11,7 +11,7 @@ int main(int argc, char *argv[])
 {
     string file(argv[1]);
     bool eop = false;
-    float stack = 0;
+    int stack = 0;
     vector <char> bytes;
     int lines = 0;
 
@@ -31,37 +31,76 @@ int main(int argc, char *argv[])
     while ((c = fgetc(in_file)) != EOF)
     {
 
-        if (c == '\n')
-            lines++;
+        if (eop == true)
+            break;
 
-        if (c == '\t')
+        if (c == '\n') {
             lines++;
+            continue;
+        }
 
+        // Ignore indents
+        if (c == '\t') {
+            lines++;
+            continue;
+        }
+
+        // Skip comments
         if (c == '#') {
             lines++;
             continue;
         }
 
+        // Multi-line comment
+        if (c == '[') {
+            while ((c = fgetc(in_file)) != EOF) {
+                if (c == '\n')
+                    lines++;
+                if (c == ']') {
+                    lines++;
+                    break;
+                }
+            }
+            continue;
+        }
+
+        // Add one (1) from the stack
         if (c == '+') {
             stack++;
             continue;
         }
 
+        // Remove one (1) from the stack
         if (c == '-') {
             stack--;
             continue;
         }
 
+        // Multiply the stack by itself
         if (c == '*') {
             stack = stack * stack;
             continue;
         }
 
+        // Devide the stack by itself
         if (c == '/') {
             stack = stack / stack;
             continue;
         }
 
+        // Display character (no newline)
+        if (c == '!') {
+            printf("%c", stack);
+            continue;
+        }
+
+        // Display character (w/ newline)
+        if (c == '\\') {
+            printf("%c\n", stack);
+            continue;
+        }
+
+        // End of program
         if (c == '@') {
             eop = true;
             break;

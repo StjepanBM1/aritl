@@ -1,0 +1,6 @@
+    4/26/2023
+        
+        Changes to ARITL (as of version 1.1.0):
+        =======================================
+            -   Multi-line comments
+            -   Character display
