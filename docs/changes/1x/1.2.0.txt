@@ -1,0 +1,7 @@
+    4/27/2023
+        
+        Changes to ARITL (as of version 1.2.0):
+        =======================================
+            -   Stack clean
+            -   Removal of inline comments (lol)
+            -   Use of switch statements in main.cpp

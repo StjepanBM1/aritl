@@ -2,8 +2,10 @@
 #include <iostream>
 #include <stdio.h>
 #include <fstream>
-#include <filesystem>
+#include <bitset>
 #include <vector>
+
+#include "h/types.hpp"
 
 using namespace std;
 
@@ -11,6 +13,8 @@ int main(int argc, char *argv[])
 {
     string file(argv[1]);
     bool eop = false;
+
+    /* Stack */
     int stack = 0;
     vector <char> bytes;
     int lines = 0;
@@ -30,81 +34,63 @@ int main(int argc, char *argv[])
     int c;
     while ((c = fgetc(in_file)) != EOF)
     {
-
         if (eop == true)
             break;
 
-        if (c == '\n') {
-            lines++;
-            continue;
-        }
+        switch(c)
+        {
+            case NWL:
+                lines++;
+                continue;
 
-        // Ignore indents
-        if (c == '\t') {
-            lines++;
-            continue;
-        }
+            case TAB:
+                lines++;
+                continue;
 
-        // Skip comments
-        if (c == '#') {
-            lines++;
-            continue;
-        }
-
-        // Multi-line comment
-        if (c == '[') {
-            while ((c = fgetc(in_file)) != EOF) {
-                if (c == '\n')
-                    lines++;
-                if (c == ']') {
-                    lines++;
-                    break;
+            case COP:
+                while ((c = fgetc(in_file)) != EOF) {
+                    if (c == NWL)
+                        lines++;
+                    if (c == CCL)
+                        lines++;
+                        break;
                 }
-            }
-            continue;
+                continue;
+
+            case ADD:
+                stack++;
+                continue;
+
+            case SUB:
+                stack--;
+                continue;
+            
+            case MUL:
+                stack = stack * stack;
+                continue;
+
+            case DIV:
+                stack = stack / stack;
+                continue;
+            
+            case OUT:
+                printf("%c", stack);
+                continue;
+            
+            case ONL:
+                printf("%c\n", stack);
+                continue;
+            
+            case CLR:
+                stack = 0;
+                continue;
+
+            case EOP:
+                eop = true;
+                continue;
+
         }
 
-        // Add one (1) from the stack
-        if (c == '+') {
-            stack++;
-            continue;
-        }
-
-        // Remove one (1) from the stack
-        if (c == '-') {
-            stack--;
-            continue;
-        }
-
-        // Multiply the stack by itself
-        if (c == '*') {
-            stack = stack * stack;
-            continue;
-        }
-
-        // Devide the stack by itself
-        if (c == '/') {
-            stack = stack / stack;
-            continue;
-        }
-
-        // Display character (no newline)
-        if (c == '!') {
-            printf("%c", stack);
-            continue;
-        }
-
-        // Display character (w/ newline)
-        if (c == '\\') {
-            printf("%c\n", stack);
-            continue;
-        }
-
-        // End of program
-        if (c == '@') {
-            eop = true;
-            break;
-        }
     }
 
     if (eop == false) {
@@ -118,4 +104,3 @@ int main(int argc, char *argv[])
 
     return EXIT_SUCCESS;
 }
-
