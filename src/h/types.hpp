@@ -11,6 +11,7 @@
 #define CCL ']'
 #define CLR '&'
 #define ONL '\\'
+#define IN  '?'
 #define OUT '!'
 #define NWL '\n'
 #define TAB '\t'

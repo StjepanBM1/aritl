@@ -73,10 +73,14 @@ int main(int argc, char *argv[])
                 stack = stack / stack;
                 continue;
             
+            case IN:
+                cout << "?"; cin >> stack;
+                continue;
+
             case OUT:
                 printf("%c", stack);
                 continue;
-            
+
             case ONL:
                 printf("%c\n", stack);
                 continue;

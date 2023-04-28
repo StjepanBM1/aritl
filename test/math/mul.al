@@ -1,6 +1,8 @@
 
-# Multiply stack by itself
-# Stack output : 4
+[ 
+  Multiply stack by itself
+  Stack output : 4
+]
 
 +
 +
